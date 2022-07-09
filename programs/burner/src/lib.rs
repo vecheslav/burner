@@ -7,7 +7,7 @@ pub mod state;
 use instructions::*;
 use state::*;
 
-declare_id!("98ZZksmcbtKXafBzaRLzSrVWgvWZgkVkppr4P8cGrAXm");
+declare_id!("DhhMHW3W1VkCDB9E11DGHbRNsdfr17zfJ7ovQRFcLp4P");
 
 #[program]
 pub mod burner {
