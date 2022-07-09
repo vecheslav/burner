@@ -1,0 +1,15 @@
+[programs.localnet]
+burner = "98ZZksmcbtKXafBzaRLzSrVWgvWZgkVkppr4P8cGrAXm"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "yarn test:program"
+
+[test.validator]
+url = "https://api.mainnet-beta.solana.com"
