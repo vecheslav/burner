@@ -4,7 +4,7 @@ use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 use crate::{events::CreateFurnaceEvent, state::*};
 
 #[derive(Accounts)]
-#[instruction(amount: u64, interval: u64)]
+#[instruction(amount: u64, lifetime: u64)]
 pub struct CreateFurnace<'info> {
     /// Furnace account
     #[account(
@@ -63,13 +63,13 @@ impl<'info> CreateFurnace<'info> {
 pub fn create_furnace_handler(
     ctx: Context<CreateFurnace>,
     amount: u64,
-    interval: u64,
+    lifetime: u64,
 ) -> Result<()> {
     let furnace = &mut ctx.accounts.furnace;
     let reward_mint = &ctx.accounts.reward_mint;
 
     furnace.initialize(
-        interval,
+        lifetime,
         reward_mint.key(),
         *ctx.bumps.get("furnace_authority").unwrap(),
         *ctx.bumps.get("reward_vault").unwrap(),

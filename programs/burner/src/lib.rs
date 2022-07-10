@@ -13,8 +13,8 @@ declare_id!("DhhMHW3W1VkCDB9E11DGHbRNsdfr17zfJ7ovQRFcLp4P");
 pub mod burner {
     use super::*;
 
-    pub fn create_furnace(ctx: Context<CreateFurnace>, amount: u64, interval: u64) -> Result<()> {
-        create_furnace_handler(ctx, amount, interval)
+    pub fn create_furnace(ctx: Context<CreateFurnace>, amount: u64, lifetime: u64) -> Result<()> {
+        create_furnace_handler(ctx, amount, lifetime)
     }
 
     #[access_control(not_completed(&ctx.accounts.furnace, ctx.accounts.clock.slot))]

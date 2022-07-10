@@ -7,17 +7,17 @@ pub struct Furnace {
     pub bump: u8,
     pub vault_bump: u8,
 
-    pub interval: u64,
-    pub last_burn: u64,
+    pub lifetime: u64,
 
+    pub last_burn: u64,
     pub last_stoker: Pubkey,
 }
 
 impl Furnace {
     pub const LEN: usize = 8 + (32 + 1 + 1 + 8 + 8 + 32);
 
-    pub fn initialize(&mut self, interval: Slot, reward_mint: Pubkey, bump: u8, vault_bump: u8) {
-        self.interval = interval;
+    pub fn initialize(&mut self, lifetime: Slot, reward_mint: Pubkey, bump: u8, vault_bump: u8) {
+        self.lifetime = lifetime;
         self.reward_mint = reward_mint;
         self.bump = bump;
         self.vault_bump = vault_bump;
@@ -29,6 +29,6 @@ impl Furnace {
     }
 
     pub fn is_completed(&self, slot: Slot) -> bool {
-        self.last_burn != 0 && self.last_burn + self.interval < slot
+        self.last_burn != 0 && self.last_burn + self.lifetime < slot
     }
 }
