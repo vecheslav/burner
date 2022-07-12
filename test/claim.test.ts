@@ -48,6 +48,7 @@ describe('claim', () => {
       .accounts({
         furnace: furnace.publicKey,
         furnaceAuthority: furnaceAuthority[0],
+        coalMint: coalMint.publicKey,
         rewardMint: rewardMint.publicKey,
         rewardVault: rewardVault[0],
         rewardFrom: rewardFrom,
@@ -73,6 +74,26 @@ describe('claim', () => {
       .rpc()
   })
 
+  test('fail: not complained', async () => {
+    try {
+      await program.methods
+        .claim()
+        .accounts({
+          furnace: furnace.publicKey,
+          furnaceAuthority: furnaceAuthority[0],
+          rewardMint: rewardMint.publicKey,
+          rewardVault: rewardVault[0],
+          stoker: stoker.owner.publicKey,
+          stokerRewardAta: stoker.ata[1],
+          clock: web3.SYSVAR_CLOCK_PUBKEY,
+        })
+        .rpc()
+      fail()
+    } catch ({ error }) {
+      expect(error.errorCode.code).toBe('FurnaceNotCompleted')
+    }
+  })
+
   test('success', async () => {
     await delay(2000)
 
@@ -91,25 +112,5 @@ describe('claim', () => {
 
     const stokerRewardTokentAccount = await splToken.account.token.fetch(stoker.ata[1])
     expect(stokerRewardTokentAccount.amount.eq(new BN(1000))).toBeTruthy()
-  })
-
-  test.skip('fail: not complained', async () => {
-    try {
-      await program.methods
-        .claim()
-        .accounts({
-          furnace: furnace.publicKey,
-          furnaceAuthority: furnaceAuthority[0],
-          rewardMint: rewardMint.publicKey,
-          rewardVault: rewardVault[0],
-          stoker: stoker.owner.publicKey,
-          stokerRewardAta: stoker.ata[1],
-          clock: web3.SYSVAR_CLOCK_PUBKEY,
-        })
-        .rpc()
-      fail()
-    } catch ({ error }) {
-      expect(error.errorCode.code).toBe('FurnaceNotCompleted')
-    }
   })
 })

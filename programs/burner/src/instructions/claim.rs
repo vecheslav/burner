@@ -26,7 +26,7 @@ pub struct Claim<'info> {
     #[account(
         mut,
         seeds = [b"reward_vault".as_ref(), furnace.key().as_ref()],
-        bump = furnace.vault_bump,
+        bump = furnace.reward_vault_bump,
     )]
     pub reward_vault: Account<'info, TokenAccount>,
 

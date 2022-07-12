@@ -35,6 +35,9 @@ pub struct CreateFurnace<'info> {
     )]
     pub reward_vault: Account<'info, TokenAccount>,
 
+    /// Mint of coal
+    pub coal_mint: Account<'info, Mint>,
+
     #[account(mut)]
     pub payer: Signer<'info>,
 
@@ -67,12 +70,14 @@ pub fn create_furnace_handler(
 ) -> Result<()> {
     let furnace = &mut ctx.accounts.furnace;
     let reward_mint = &ctx.accounts.reward_mint;
+    let coal_mint = &ctx.accounts.coal_mint;
 
     furnace.initialize(
-        lifetime,
-        reward_mint.key(),
         *ctx.bumps.get("furnace_authority").unwrap(),
         *ctx.bumps.get("reward_vault").unwrap(),
+        reward_mint.key(),
+        coal_mint.key(),
+        lifetime,
     );
 
     token::transfer(ctx.accounts.transfer_context(), amount)?;

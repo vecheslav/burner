@@ -8,12 +8,14 @@ const program = workspace.Burner as Program<Burner>
 
 describe('create furnace', () => {
   const payer = provider.wallet
+  const coalMint = web3.Keypair.generate()
   const rewardMint = web3.Keypair.generate()
 
   beforeAll(async () => {
     setProvider(provider)
 
     await createMint(rewardMint, payer.publicKey)
+    await createMint(coalMint, payer.publicKey, 0)
 
     const { address: rewardFrom } = await getOrCreateATA(rewardMint.publicKey, payer.publicKey)
     await splToken.methods
@@ -45,6 +47,7 @@ describe('create furnace', () => {
       .accounts({
         furnace: furnace.publicKey,
         furnaceAuthority: furnaceAuthority[0],
+        coalMint: coalMint.publicKey,
         rewardMint: rewardMint.publicKey,
         rewardVault: rewardVault[0],
         rewardFrom: rewardFrom,

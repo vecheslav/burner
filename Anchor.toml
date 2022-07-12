@@ -1,11 +1,14 @@
 [programs.localnet]
 burner = "DhhMHW3W1VkCDB9E11DGHbRNsdfr17zfJ7ovQRFcLp4P"
 
+[programs.devnet]
+burner = "DhhMHW3W1VkCDB9E11DGHbRNsdfr17zfJ7ovQRFcLp4P"
+
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "devnet"
+cluster = "localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

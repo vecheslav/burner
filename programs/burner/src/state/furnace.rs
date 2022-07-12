@@ -2,10 +2,11 @@ use anchor_lang::{prelude::*, solana_program::clock::Slot};
 
 #[account]
 pub struct Furnace {
-    pub reward_mint: Pubkey,
-
     pub bump: u8,
-    pub vault_bump: u8,
+    pub reward_vault_bump: u8,
+
+    pub reward_mint: Pubkey,
+    pub coal_mint: Pubkey,
 
     pub lifetime: u64,
 
@@ -14,13 +15,21 @@ pub struct Furnace {
 }
 
 impl Furnace {
-    pub const LEN: usize = 8 + (32 + 1 + 1 + 8 + 8 + 32);
+    pub const LEN: usize = 8 + (1 + 1 + 32 + 32 + 8 + 8 + 32);
 
-    pub fn initialize(&mut self, lifetime: Slot, reward_mint: Pubkey, bump: u8, vault_bump: u8) {
-        self.lifetime = lifetime;
-        self.reward_mint = reward_mint;
+    pub fn initialize(
+        &mut self,
+        bump: u8,
+        reward_vault_bump: u8,
+        reward_mint: Pubkey,
+        coal_mint: Pubkey,
+        lifetime: Slot,
+    ) {
         self.bump = bump;
-        self.vault_bump = vault_bump;
+        self.reward_vault_bump = reward_vault_bump;
+        self.reward_mint = reward_mint;
+        self.coal_mint = coal_mint;
+        self.lifetime = lifetime;
     }
 
     pub fn burn(&mut self, stoker: Pubkey, slot: Slot) {

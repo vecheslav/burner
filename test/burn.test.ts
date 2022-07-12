@@ -46,6 +46,7 @@ describe('burn', () => {
       .accounts({
         furnace: furnace.publicKey,
         furnaceAuthority: furnaceAuthority[0],
+        coalMint: coalMint.publicKey,
         rewardMint: rewardMint.publicKey,
         rewardVault: rewardVault[0],
         rewardFrom: rewardFrom,
@@ -54,6 +55,28 @@ describe('burn', () => {
       .rpc()
 
     stoker = await addHolder([{ mint: coalMint.publicKey, amount: 10 }])
+  })
+
+  test('fail: invalid coal mint', async () => {
+    const fakeCoalMint = web3.Keypair.generate()
+    await createMint(fakeCoalMint, payer.publicKey, 0)
+
+    try {
+      await program.methods
+        .burn()
+        .accounts({
+          furnace: furnace.publicKey,
+          coalMint: fakeCoalMint.publicKey,
+          stoker: stoker.owner.publicKey,
+          stokerCoalFrom: stoker.ata[0],
+          clock: web3.SYSVAR_CLOCK_PUBKEY,
+        })
+        .signers([stoker.owner])
+        .rpc()
+      fail()
+    } catch ({ error }) {
+      expect(error.errorCode.code).toBe('ConstraintHasOne')
+    }
   })
 
   test('success', async () => {

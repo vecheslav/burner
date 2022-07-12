@@ -6,7 +6,7 @@ use crate::{events::BurnEvent, state::*};
 #[derive(Accounts)]
 pub struct Burn<'info> {
     /// Furnace account
-    #[account(mut)]
+    #[account(mut, has_one = coal_mint)]
     pub furnace: Account<'info, Furnace>,
 
     /// Mint of coal
